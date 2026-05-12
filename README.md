@@ -1,4 +1,4 @@
-# 💈 Barber Spa - Website Đặt Lịch Salon / Barber Trực Tuyến
+<img width="1552" height="728" alt="image" src="https://github.com/user-attachments/assets/072f20dc-0007-4df7-8e51-21ee3d2347a6" /># 💈 Barber Spa - Website Đặt Lịch Salon / Barber Trực Tuyến
 
 Đồ án / bài tập lớn Phần mềm mã nguồn mở  
 Xây dựng hệ thống website trên nền tảng **WordPress** cho phép khách hàng tìm kiếm salon, đặt lịch dịch vụ, thanh toán, đánh giá và quản lý lịch hẹn trực tuyến thông qua Plugin **LOPAS**.
@@ -122,12 +122,15 @@ wordpress/
 
 *Vui lòng xem các ảnh chụp màn hình trong thư mục `/docs/screenshots/`*
 
-1. **Trang chủ & Tìm kiếm:** [Ảnh 1]
-2. **Quy trình đặt lịch:** [Ảnh 2]
-3. **Dashboard quản trị:** [Ảnh 3]
+1. **Trang chủ & Tìm kiếm:** <img width="1519" height="840" alt="image" src="https://github.com/user-attachments/assets/0400b50f-905c-4ba6-8391-aecf343b3e4b" />
+
+2. **Quy trình đặt lịch:** <img width="1255" height="722" alt="{7F0D6436-43A2-4254-A2E6-D1B8896C04CF}" src="https://github.com/user-attachments/assets/47f0ac09-d574-4aec-8247-4eb09dbd005e" />
+
+3. **Dashboard quản trị:** <img width="1880" height="494" alt="image" src="https://github.com/user-attachments/assets/d876e1fc-946d-4af9-a328-cee5f1f52c18" />
+
 
 ## 📺 Video Demo
-- **Link Video:** [Đang cập nhật - Vui lòng dán link Youtube/Drive tại đây]
+- **Link Video:** https://drive.google.com/file/d/1TlMJGD5cWRdw6pBP8z6y5Uyh1h3fCsEZ/view?usp=sharing
 
 ## 🌐 Link Online (Deploy)
 - **Website:** [https://sonokela.online/](https://sonokela.online/)
