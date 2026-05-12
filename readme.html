@@ -1,98 +1,345 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-	<meta name="viewport" content="width=device-width" />
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta name="robots" content="noindex,nofollow" />
-	<title>WordPress &#8250; ReadMe</title>
-	<link rel="stylesheet" href="wp-admin/css/install.css?ver=20100228" type="text/css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barber Spa - Hệ thống Đặt Lịch Trực Tuyến</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #e67e22;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        .header-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+        .card-header {
+            background-color: white;
+            border-bottom: 2px solid #f1f1f1;
+            font-weight: bold;
+            font-size: 1.25rem;
+            padding: 20px;
+            border-radius: 15px 15px 0 0 !important;
+        }
+        .card-body {
+            padding: 30px;
+        }
+        .table {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table thead {
+            background-color: #f1f1f1;
+        }
+        .tech-badge {
+            background-color: #e9ecef;
+            color: #495057;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+        pre {
+            background-color: #272822;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+        .status-check {
+            color: #28a745;
+        }
+        .sidebar {
+            position: sticky;
+            top: 20px;
+        }
+        .nav-pills .nav-link {
+            color: var(--secondary-color);
+            margin-bottom: 5px;
+        }
+        .nav-pills .nav-link.active {
+            background-color: var(--accent-color);
+        }
+        h2 {
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+            border-left: 5px solid var(--accent-color);
+            padding-left: 15px;
+        }
+        .test-account {
+            background-color: #fff;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+    </style>
 </head>
 <body>
-<h1 id="logo">
-	<a href="https://wordpress.org/"><img alt="WordPress" src="wp-admin/images/wordpress-logo.png" /></a>
-</h1>
-<p style="text-align: center">Semantic Personal Publishing Platform</p>
 
-<h2>First Things First</h2>
-<p>Welcome. WordPress is a very special project to me. Every developer and contributor adds something unique to the mix, and together we create something beautiful that I am proud to be a part of. Thousands of hours have gone into WordPress, and we are dedicated to making it better every day. Thank you for making it part of your world.</p>
-<p style="text-align: right">&#8212; Matt Mullenweg</p>
+<div class="header-section text-center">
+    <div class="container">
+        <h1><i class="fas fa-scissors"></i> Barber Spa</h1>
+        <p class="lead">Website Đặt Lịch Salon / Barber Trực Tuyến</p>
+        <div class="mt-4">
+            <span class="badge bg-light text-dark p-2 px-3">Đồ án Lập trình Web</span>
+        </div>
+    </div>
+</div>
 
-<h2>Installation: Famous 5-minute install</h2>
-<ol>
-	<li>Unzip the package in an empty directory and upload everything.</li>
-	<li>Open <span class="file"><a href="wp-admin/install.php">wp-admin/install.php</a></span> in your browser. It will take you through the process to set up a <code>wp-config.php</code> file with your database connection details.
-		<ol>
-			<li>If for some reason this does not work, do not worry. It may not work on all web hosts. Open up <code>wp-config-sample.php</code> with a text editor like WordPad or similar and fill in your database connection details.</li>
-			<li>Save the file as <code>wp-config.php</code> and upload it.</li>
-			<li>Open <span class="file"><a href="wp-admin/install.php">wp-admin/install.php</a></span> in your browser.</li>
-		</ol>
-	</li>
-	<li>Once the configuration file is set up, the installer will set up the tables needed for your site. If there is an error, double check your <code>wp-config.php</code> file, and try again. If it fails again, please go to the <a href="https://wordpress.org/support/forums/">WordPress support forums</a> with as much data as you can gather.</li>
-	<li><strong>If you did not enter a password, note the password given to you.</strong> If you did not provide a username, it will be <code>admin</code>.</li>
-	<li>The installer should then send you to the <a href="wp-login.php">login page</a>. Sign in with the username and password you chose during the installation. If a password was generated for you, you can then click on &#8220;Profile&#8221; to change the password.</li>
-</ol>
+<div class="container mb-5">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-md-3 d-none d-md-block">
+            <div class="sidebar">
+                <nav id="navbar-example3" class="h-100 flex-column align-items-stretch pe-4 border-end">
+                    <nav class="nav nav-pills flex-column">
+                        <a class="nav-link" href="#members">👥 Thành viên</a>
+                        <a class="nav-link" href="#intro">🎯 Giới thiệu</a>
+                        <a class="nav-link" href="#tech">🚀 Công nghệ</a>
+                        <a class="nav-link" href="#structure">🗂️ Cấu trúc</a>
+                        <a class="nav-link" href="#features">✨ Chức năng</a>
+                        <a class="nav-link" href="#install">⚙️ Cài đặt</a>
+                        <a class="nav-link" href="#test">🔐 Tài khoản Test</a>
+                    </nav>
+                </nav>
+            </div>
+        </div>
 
-<h2>Updating</h2>
-<h3>Using the Automatic Updater</h3>
-<ol>
-	<li>Open <span class="file"><a href="wp-admin/update-core.php">wp-admin/update-core.php</a></span> in your browser and follow the instructions.</li>
-	<li>You wanted more, perhaps? That&#8217;s it!</li>
-</ol>
+        <!-- Main Content -->
+        <div class="col-md-9">
+            <section id="members">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-users me-2"></i> Thành viên nhóm
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Họ và tên</th>
+                                    <th>MSSV</th>
+                                    <th>Vai trò</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Nguyễn Công Sơn</td>
+                                    <td>23810310102</td>
+                                    <td><span class="badge bg-primary">Nhóm trưởng</span></td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Nguyễn Văn Quang</td>
+                                    <td>23810310108</td>
+                                    <td>Thành viên</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Nguyễn Văn Danh</td>
+                                    <td>23810310136</td>
+                                    <td>Thành viên</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
 
-<h3>Updating Manually</h3>
-<ol>
-	<li>Before you update anything, make sure you have backup copies of any files you may have modified such as <code>index.php</code>.</li>
-	<li>Delete your old WordPress files, saving ones you&#8217;ve modified.</li>
-	<li>Upload the new files.</li>
-	<li>Point your browser to <span class="file"><a href="wp-admin/upgrade.php">/wp-admin/upgrade.php</a>.</span></li>
-</ol>
+            <section id="intro">
+                <h2>🎯 Giới thiệu</h2>
+                <p>
+                    <strong>Barber Spa</strong> là nền tảng đặt lịch salon/barber trực tuyến trên nền tảng <strong>WordPress</strong>, kết nối khách hàng với các salon chuyên nghiệp. Hệ thống được tích hợp dưới dạng Plugin **LOPAS** mạnh mẽ, hỗ trợ quản lý đa chi nhánh và quy trình đặt lịch tự động.
+                </p>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <div class="text-center p-3 border rounded">
+                            <i class="fas fa-user-tag fa-2x mb-3 text-primary"></i>
+                            <h5>Khách hàng</h5>
+                            <p class="small text-muted">Tìm kiếm, đặt lịch & thanh toán trực tuyến.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-3 border rounded">
+                            <i class="fas fa-store fa-2x mb-3 text-success"></i>
+                            <h5>Chủ Salon</h5>
+                            <p class="small text-muted">Quản lý dịch vụ, nhân viên & lịch hẹn cơ sở.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="text-center p-3 border rounded">
+                            <i class="fas fa-user-shield fa-2x mb-3 text-danger"></i>
+                            <h5>Quản trị viên</h5>
+                            <p class="small text-muted">Điều hành toàn hệ thống & phê duyệt salon.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-<h2>Migrating from other systems</h2>
-<p>WordPress can <a href="https://developer.wordpress.org/advanced-administration/wordpress/import/">import from a number of systems</a>. First you need to get WordPress installed and working as described above, before using <a href="wp-admin/import.php">our import tools</a>.</p>
+            <section id="tech">
+                <h2>🚀 Công nghệ sử dụng</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Core & Backend</h6>
+                                <div class="mb-3">
+                                    <span class="tech-badge">WordPress 6.x</span>
+                                    <span class="tech-badge">PHP 8.0 (Plugin MVC)</span>
+                                    <span class="tech-badge">MySQL / MariaDB</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Frontend & UI</h6>
+                                <div class="mb-3">
+                                    <span class="tech-badge">HTML5/CSS3</span>
+                                    <span class="tech-badge">Bootstrap 5</span>
+                                    <span class="tech-badge">JavaScript (AJAX)</span>
+                                    <span class="tech-badge">Chart.js</span>
+                                </div>
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <h6>Integrations</h6>
+                                <div>
+                                    <span class="tech-badge">VNPay Sandbox</span>
+                                    <span class="tech-badge">PHPMailer (SMTP)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-<h2>System Requirements</h2>
-<ul>
-	<li><a href="https://www.php.net/">PHP</a> version <strong>7.2.24</strong> or greater.</li>
-	<li><a href="https://www.mysql.com/">MySQL</a> version <strong>5.5.5</strong> or greater.</li>
-</ul>
+            <section id="structure">
+                <h2>🗂️ Cấu trúc thư mục trọng tâm</h2>
+                <p>Dự án tập trung vào Plugin <code>lopas</code> trong thư mục plugins của WordPress:</p>
+                <pre><code>wordpress/
+├── wp-content/
+│   └── plugins/
+│       └── lopas/             <-- Plugin chính
+│           ├── assets/        (CSS, JS, Images)
+│           ├── includes/      (Core logic, Admin, API)
+│           ├── templates/     (Giao diện đặt lịch)
+│           └── lopas.php      (Khởi tạo plugin)
+├── wp-config.php              (Cấu hình Database)
+└── README.md                  (Tài liệu gốc)</code></pre>
+            </section>
 
-<h3>Recommendations</h3>
-<ul>
-	<li><a href="https://www.php.net/">PHP</a> version <strong>8.3</strong> or greater.</li>
-	<li><a href="https://www.mysql.com/">MySQL</a> version <strong>8.0</strong> or greater OR <a href="https://mariadb.org/">MariaDB</a> version <strong>10.6</strong> or greater.</li>
-	<li>The <a href="https://httpd.apache.org/docs/2.2/mod/mod_rewrite.html">mod_rewrite</a> Apache module.</li>
-	<li><a href="https://wordpress.org/news/2016/12/moving-toward-ssl/">HTTPS</a> support.</li>
-	<li>A link to <a href="https://wordpress.org/">wordpress.org</a> on your site.</li>
-</ul>
+            <section id="features">
+                <h2>✨ Chức năng chính</h2>
+                <div class="accordion" id="accordionFeatures">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                <i class="fas fa-user me-2"></i> Khách hàng
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionFeatures">
+                            <div class="accordion-body">
+                                <ul>
+                                    <li>Tìm kiếm salon theo khu vực/dịch vụ (Autocomplete).</li>
+                                    <li>Đặt lịch 4 bước: Dịch vụ -> Thợ -> Giờ -> Xác nhận.</li>
+                                    <li>Giữ slot 10 phút để tránh đặt trùng.</li>
+                                    <li>Thanh toán VNPay hoặc tại quầy.</li>
+                                    <li>Quản lý My Bookings & Đánh giá dịch vụ.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                <i class="fas fa-tasks me-2"></i> Chủ Salon & Admin
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFeatures">
+                            <div class="accordion-body">
+                                <ul>
+                                    <li>Dashboard thống kê doanh thu/booking (Chart.js).</li>
+                                    <li>Quản lý chi tiết Salon, Dịch vụ & Nhân viên.</li>
+                                    <li>Phê duyệt/Từ chối/Hoàn thành lịch hẹn.</li>
+                                    <li>Quản lý đánh giá và phản hồi khách hàng.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-<h2>Online Resources</h2>
-<p>If you have any questions that are not addressed in this document, please take advantage of WordPress&#8217; numerous online resources:</p>
-<dl>
-	<dt><a href="https://wordpress.org/documentation/">HelpHub</a></dt>
-		<dd>HelpHub is the encyclopedia of all things WordPress. It is the most comprehensive source of information for WordPress available.</dd>
-	<dt><a href="https://wordpress.org/news/">The WordPress Blog</a></dt>
-		<dd>This is where you&#8217;ll find the latest updates and news related to WordPress. Recent WordPress news appears in your administrative dashboard by default.</dd>
-	<dt><a href="https://planet.wordpress.org/">WordPress Planet</a></dt>
-		<dd>The WordPress Planet is a news aggregator that brings together posts from WordPress blogs around the web.</dd>
-	<dt><a href="https://wordpress.org/support/forums/">WordPress Support Forums</a></dt>
-		<dd>If you&#8217;ve looked everywhere and still cannot find an answer, the support forums are very active and have a large community ready to help. To help them help you be sure to use a descriptive thread title and describe your question in as much detail as possible.</dd>
-	<dt><a href="https://make.wordpress.org/support/handbook/appendix/other-support-locations/introduction-to-irc/">WordPress <abbr>IRC</abbr> (Internet Relay Chat) Channel</a></dt>
-		<dd>There is an online chat channel that is used for discussion among people who use WordPress and occasionally support topics. The above wiki page should point you in the right direction. (<a href="https://web.libera.chat/#wordpress">irc.libera.chat #wordpress</a>)</dd>
-</dl>
+            <section id="install">
+                <h2>⚙️ Hướng dẫn cài đặt</h2>
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i> Yêu cầu: XAMPP, PHP 8.0+, WordPress.
+                </div>
+                <ol class="list-group list-group-numbered">
+                    <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Copy Source Code</div>
+                            Vào thư mục <code>htdocs/Wordpressnangcao/wordpress</code>.
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Cấu hình Database</div>
+                            Tạo DB <code>wordpress_db</code> và import file SQL dự án.
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-start border-0">
+                        <div class="ms-2 me-auto">
+                            <div class="fw-bold">Kích hoạt Plugin</div>
+                            Vào WP-Admin -> Plugins -> Activate "LOPAS Barber Spa".
+                        </div>
+                    </li>
+                </ol>
+            </section>
 
-<h2>Final Notes</h2>
-<ul>
-	<li>If you have any suggestions, ideas, or comments, or if you (gasp!) found a bug, join us in the <a href="https://wordpress.org/support/forums/">Support Forums</a>.</li>
-	<li>WordPress has a robust plugin <abbr>API</abbr> (Application Programming Interface) that makes extending the code easy. If you are a developer interested in utilizing this, see the <a href="https://developer.wordpress.org/plugins/">Plugin Developer Handbook</a>. You shouldn&#8217;t modify any of the core code.</li>
-</ul>
+            <section id="test">
+                <h2>🔐 Tài khoản Test</h2>
+                <div class="test-account">
+                    <strong><i class="fas fa-user-shield me-2"></i> Admin:</strong> <code>admin@barberspa.vn</code> / <code>Admin@123</code>
+                </div>
+                <div class="test-account">
+                    <strong><i class="fas fa-user-tie me-2"></i> Owner:</strong> <code>owner1@gmail.com</code> / <code>Owner@123</code>
+                </div>
+                <div class="test-account">
+                    <strong><i class="fas fa-user me-2"></i> Customer:</strong> <code>an@gmail.com</code> / <code>Customer@123</code>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
 
-<h2>Share the Love</h2>
-<p>WordPress has no multi-million dollar marketing campaign or celebrity sponsors, but we do have something even better&#8212;you. If you enjoy WordPress please consider telling a friend, setting it up for someone less knowledgeable than yourself, or writing the author of a media article that overlooks us.</p>
+<footer class="bg-dark text-white text-center py-4 mt-5">
+    <div class="container">
+        <p class="mb-0">Hà Nội, 2026 - Nhóm 1 Lập trình Web Nâng Cao</p>
+    </div>
+</footer>
 
-<p>WordPress is the official continuation of b2/caf&#233;log, which came from Michel V. The work has been continued by the <a href="https://wordpress.org/about/">WordPress developers</a>. If you would like to support WordPress, please consider <a href="https://wordpress.org/donate/">donating</a>.</p>
-
-<h2>License</h2>
-<p>WordPress is free software, and is released under the terms of the <abbr>GPL</abbr> (GNU General Public License) version 2 or (at your option) any later version. See <a href="license.txt">license.txt</a>.</p>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
