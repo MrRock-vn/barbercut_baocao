@@ -21,7 +21,7 @@ Xây dựng hệ thống website trên nền tảng **WordPress** cho phép khá
 
 ## 🎯 Giới thiệu
 
-Barber Spa là nền tảng đặt lịch salon/barber trực tuyến, kết nối khách hàng với các salon có dịch vụ cắt tóc, gội đầu, massage, chăm sóc da và làm đẹp. Hệ thống được phát triển dựa trên **WordPress** với Plugin **LOPAS** tự xây dựng, hỗ trợ 3 vai trò chính:
+Barber Spa là nền tảng đặt lịch salon/barber trực tuyến, kết nối khách hàng với các salon có dịch vụ cắt tóc, gội đầu, massage, chăm sóc da và làm đẹp. Hệ thống được phát triển dựa trên WordPress với Plugin LOPAS tự xây dựng, hỗ trợ 3 vai trò chính:
 
 - **Khách hàng (Customer):** tìm kiếm salon, xem dịch vụ, đặt lịch, thanh toán, theo dõi booking, viết review.
 - **Chủ salon (Owner):** quản lý salon, nhân viên, dịch vụ, lịch hẹn, doanh thu và review của salon mình.
@@ -116,7 +116,7 @@ wordpress/
 
 | Vai trò  | Email                     | Mật khẩu       | Ghi chú            |
 | -------- | ------------------------- | -------------- | ------------------ |
-| Customer | `damtrungson09@gmail.com` | `Anhhd@12345`  |   |
+| Customer | `damtrungson00@gmail.com` | `Anhhd@12345`  | test quên mật khẩu |
 
 ## 📸 Hình ảnh minh họa hệ thống
 
