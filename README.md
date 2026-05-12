@@ -1,4 +1,4 @@
-<img width="1552" height="728" alt="image" src="https://github.com/user-attachments/assets/072f20dc-0007-4df7-8e51-21ee3d2347a6" /># 💈 Barber Spa - Website Đặt Lịch Salon / Barber Trực Tuyến
+# 💈 Barber Spa - Website Đặt Lịch Salon / Barber Trực Tuyến
 
 Đồ án / bài tập lớn Phần mềm mã nguồn mở  
 Xây dựng hệ thống website trên nền tảng **WordPress** cho phép khách hàng tìm kiếm salon, đặt lịch dịch vụ, thanh toán, đánh giá và quản lý lịch hẹn trực tuyến thông qua Plugin **LOPAS**.
