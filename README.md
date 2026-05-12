@@ -116,7 +116,7 @@ wordpress/
 
 | Vai trò  | Email                     | Mật khẩu       | Ghi chú            |
 | -------- | ------------------------- | -------------- | ------------------ |
-| Customer | `damtrungson00@gmail.com` | `Anhhd@12345`  | test quên mật khẩu |
+| Customer | `damtrungson00@gmail.com` | `Anhhd@12345`  |  |
 
 ## 📸 Hình ảnh minh họa hệ thống
 
