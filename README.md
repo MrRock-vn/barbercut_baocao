@@ -7,9 +7,17 @@ Xây dựng hệ thống website trên nền tảng **WordPress** cho phép khá
 
 | STT | Họ và tên          | MSSV          | Vai trò     |
 | --- | ------------------ | ------------- | ----------- |
-| 1   | [Nguyễn Công Sơn]  | [23810310102] | Nhóm trưởng |
-| 2   | [Nguyễn Văn Quang] | [23810310108] | Thành viên  |
-| 3   | [Nguyễn Văn Danh]  | [23810310136] | Thành viên  |
+| 1   | Nguyễn Công Sơn  | 23810310102 | Nhóm trưởng - Backend, Quản lý Salon, VNPay |
+| 2   | Nguyễn Văn Quang | 23810310108 | Thành viên - Frontend, Đặt lịch, Tìm kiếm     |
+| 3   | Nguyễn Văn Danh  | 23810310136 | Thành viên - Admin Dashboard, Reviews, Users |
+
+## 📊 Phân công nhiệm vụ cụ thể
+
+| Thành viên          | Nhiệm vụ chính                                                                 | Mức độ đóng góp |
+| ------------------- | ------------------------------------------------------------------------------ | --------------- |
+| **Nguyễn Công Sơn** | Thiết kế DB, Phát triển Plugin LOPAS, API VNPay, Quản lý Salon, Staff, Service | 35%             |
+| **Nguyễn Văn Quang** | Giao diện Frontend, Quy trình đặt lịch 4 bước, AJAX Slot detection, Tìm kiếm   | 33%             |
+| **Nguyễn Văn Danh** | Trang Admin Dashboard, Thống kê biểu đồ, Quản lý User/Review, Viết báo cáo     | 32%             |
 
 ## 🎯 Giới thiệu
 
@@ -108,8 +116,21 @@ wordpress/
 
 | Vai trò  | Email                     | Mật khẩu       | Ghi chú            |
 | -------- | ------------------------- | -------------- | ------------------ |
-
 | Customer | `damtrungson09@gmail.com` | `Anhhd@12345`  |   |
+
+## 📸 Hình ảnh minh họa hệ thống
+
+*Vui lòng xem các ảnh chụp màn hình trong thư mục `/docs/screenshots/`*
+
+1. **Trang chủ & Tìm kiếm:** [Ảnh 1]
+2. **Quy trình đặt lịch:** [Ảnh 2]
+3. **Dashboard quản trị:** [Ảnh 3]
+
+## 📺 Video Demo
+- **Link Video:** [Đang cập nhật - Vui lòng dán link Youtube/Drive tại đây]
+
+## 🌐 Link Online (Deploy)
+- **Website:** [https://sonokela.online/](https://sonokela.online/)
 
 ## 📄 License & Liên hệ
 Dự án được phát triển cho môn học **Phần mềm mã nguồn mở**.
