@@ -1,0 +1,6 @@
+May 10 2026 09:19:45
+{"Number":2,"Message":"rmdir(C:\\aiu\\htdocs\\Wordpressnangcao\\wordpress\\wp-content\\plugins\\all-in-one-wp-migration\\storage\\0wpnqdm37zgr): Directory not empty","File":"C:\\aiu\\htdocs\\Wordpressnangcao\\wordpress\\wp-content\\plugins\\all-in-one-wp-migration\\lib\\vendor\\servmask\\filesystem\\class-ai1wm-directory.php","Line":74}
+
+May 10 2026 09:19:46
+{"Number":2,"Message":"filesize(): stat failed for C:\\aiu\\htdocs\\Wordpressnangcao\\wordpress\\wp-content\\plugins\\all-in-one-wp-migration\\storage\\0wpnqdm37zgr\\localhost-wordpressnangcao-wordpress-20260510-091922-lr11fhlfd55p.wpress","File":"C:\\aiu\\htdocs\\Wordpressnangcao\\wordpress\\wp-content\\plugins\\all-in-one-wp-migration\\lib\\vendor\\servmask\\archiver\\class-ai1wm-archiver.php","Line":283}
+

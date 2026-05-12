@@ -1,0 +1,303 @@
+/**
+ * LOPAS Override CSS for Twenty Twenty-Five Theme
+ * Force barber-spa blue theme styles
+ */
+
+/* Remove theme default styles */
+body {
+    background: linear-gradient(180deg, #e2e8f0 0%, #eff6ff 42%, #f8fafc 100%) !important;
+    font-family: "Inter", system-ui, -apple-system, sans-serif !important;
+}
+
+/* Remove theme padding/margin */
+.wp-site-blocks {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.wp-block-group,
+.entry-content {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Hero Section - Force blue theme */
+.hero-section {
+    position: relative !important;
+    min-height: 640px !important;
+    padding: 90px 0 120px !important;
+    background:
+        linear-gradient(90deg, rgba(9, 14, 40, 0.92), rgba(15, 23, 42, 0.7)),
+        url("https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1600&q=80")
+          center/cover no-repeat !important;
+    color: #ffffff !important;
+    overflow: hidden !important;
+}
+
+.hero-badge {
+    display: inline-block !important;
+    padding: 9px 16px !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    border-radius: 999px !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 1px !important;
+    color: #ffffff !important;
+}
+
+.hero-title {
+    font-size: 3.4rem !important;
+    line-height: 1.15 !important;
+    font-weight: 800 !important;
+    max-width: 760px !important;
+    margin: 0 !important;
+    color: #ffffff !important;
+}
+
+.hero-subtitle {
+    max-width: 640px !important;
+    font-size: 1.12rem !important;
+    line-height: 1.8 !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Search Section */
+.search-section {
+    margin-top: -70px !important;
+    position: relative !important;
+    z-index: 3 !important;
+    padding-bottom: 30px !important;
+}
+
+.search-card {
+    background: rgba(255, 255, 255, 0.96) !important;
+    border: 1px solid rgba(15, 23, 42, 0.08) !important;
+    border-radius: 24px !important;
+    padding: 32px !important;
+    box-shadow: 0 20px 40px rgba(15, 23, 42, 0.12) !important;
+}
+
+/* Categories */
+.category-pill {
+    min-height: 78px !important;
+    padding: 18px 20px !important;
+    background: #ffffff !important;
+    border-radius: 18px !important;
+    color: #0f172a !important;
+    font-weight: 700 !important;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08) !important;
+    border: 1px solid rgba(229, 231, 235, 0.8) !important;
+    transition: all 0.25s ease !important;
+    text-decoration: none !important;
+}
+
+.category-pill:hover {
+    transform: translateY(-5px) !important;
+    background: #0d6efd !important;
+    color: #ffffff !important;
+    box-shadow: 0 16px 32px rgba(13, 110, 253, 0.22) !important;
+}
+
+/* Salon Cards */
+.salon-card {
+    border-radius: 28px !important;
+    overflow: hidden !important;
+    transition: transform 0.35s ease, box-shadow 0.35s ease !important;
+    background: #fff !important;
+    border: 1px solid rgba(15, 23, 42, 0.06) !important;
+}
+
+.salon-card:hover {
+    transform: translateY(-9px) !important;
+    box-shadow: 0 26px 60px rgba(15, 23, 42, 0.16) !important;
+}
+
+/* Buttons */
+.btn-primary,
+.hero-btn-primary {
+    background: #0d6efd !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 14px !important;
+    padding: 14px 24px !important;
+    font-weight: 700 !important;
+}
+
+.btn-primary:hover,
+.hero-btn-primary:hover {
+    background: #0b5ed7 !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-light,
+.hero-btn-secondary {
+    background: transparent !important;
+    color: #ffffff !important;
+    border: 2px solid rgba(255, 255, 255, 0.42) !important;
+    border-radius: 14px !important;
+    padding: 14px 24px !important;
+    font-weight: 700 !important;
+}
+
+.btn-outline-light:hover,
+.hero-btn-secondary:hover {
+    background: #ffffff !important;
+    color: #0f172a !important;
+}
+
+/* Section Badges */
+.section-badge {
+    display: inline-block !important;
+    padding: 7px 14px !important;
+    border-radius: 999px !important;
+    background: #e8f0ff !important;
+    color: #2563eb !important;
+    font-size: 0.85rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 14px !important;
+}
+
+.section-title {
+    font-size: 2.4rem !important;
+    font-weight: 800 !important;
+    color: #0f172a !important;
+    margin-bottom: 12px !important;
+}
+
+.section-subtitle {
+    color: #6b7280 !important;
+    font-size: 1.02rem !important;
+    line-height: 1.8 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Promo Carousel */
+.promo-carousel .carousel-inner {
+    border-radius: 28px !important;
+    overflow: hidden !important;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16) !important;
+}
+
+.promo-slide {
+    position: relative !important;
+    height: 520px !important;
+}
+
+.promo-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    background: linear-gradient(
+        90deg,
+        rgba(18, 42, 106, 0.86) 0%,
+        rgba(21, 61, 147, 0.62) 60%,
+        rgba(21, 61, 147, 0.3) 100%
+    ) !important;
+    display: flex !important;
+    align-items: center !important;
+    padding: 48px !important;
+}
+
+/* Angels Showcase */
+.angels-line {
+    width: 6px !important;
+    height: 42px !important;
+    background: #3b82f6 !important;
+    border-radius: 999px !important;
+    flex-shrink: 0 !important;
+}
+
+.angel-ribbon {
+    position: absolute !important;
+    top: 0 !important;
+    left: 16px !important;
+    background: #143d93 !important;
+    color: #fff !important;
+    font-size: 0.74rem !important;
+    font-weight: 800 !important;
+    padding: 12px 10px 14px !important;
+    line-height: 1.2 !important;
+    text-align: center !important;
+    min-width: 86px !important;
+    letter-spacing: 0.3px !important;
+    clip-path: polygon(0 0, 100% 0, 100% 84%, 50% 100%, 0 84%) !important;
+    z-index: 2 !important;
+}
+
+/* Shine Footer */
+.shine-footer {
+    margin-top: 40px !important;
+    background: linear-gradient(135deg, #0b1a47, #172f75) !important;
+    color: #fff !important;
+    padding-top: 42px !important;
+}
+
+.shine-logo-box {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border-radius: 20px !important;
+    min-height: 175px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 10px !important;
+    text-align: center !important;
+    padding: 28px 20px !important;
+}
+
+.shine-logo-text {
+    font-size: 3rem !important;
+    font-weight: 900 !important;
+    color: #fff !important;
+    line-height: 1 !important;
+    letter-spacing: 1px !important;
+}
+
+.shine-footer-bottom {
+    background: rgba(255, 255, 255, 0.08) !important;
+    text-align: center !important;
+    padding: 18px 14px !important;
+    font-size: 0.96rem !important;
+    color: rgba(255, 255, 255, 0.92) !important;
+    margin-top: 10px !important;
+}
+
+/* Remove theme link colors */
+a {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+a:hover {
+    text-decoration: none !important;
+}
+
+/* Container */
+.container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 0 15px !important;
+}
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    .hero-title {
+        font-size: 2.5rem !important;
+    }
+    
+    .section-title {
+        font-size: 2rem !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero-title {
+        font-size: 2rem !important;
+    }
+    
+    .section-title {
+        font-size: 1.7rem !important;
+    }
+}

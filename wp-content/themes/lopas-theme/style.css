@@ -1,0 +1,80 @@
+/*
+Theme Name: LOPAS Barber Spa Theme
+Theme URI: http://example.com/lopas-theme/
+Author: Antigravity
+Description: A lightweight custom theme for Barber Spa booking system.
+Version: 1.0.0
+Text Domain: lopas-theme
+*/
+
+/* Reset & Base Styles */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+/* Auth Pages */
+.auth-page { background: radial-gradient(circle at top left, rgba(13, 110, 253, 0.08), transparent 24%), #f8fbff; padding: 60px 0; min-height: 90vh; }
+.auth-panel { max-width: 900px; margin: 0 auto; }
+.auth-card { display: flex; border-radius: 28px; background: #fff; border: 1px solid rgba(15, 23, 42, 0.08); box-shadow: 0 30px 60px rgba(15, 23, 42, 0.1); overflow: hidden; min-height: 500px; }
+.auth-card-side { flex: 0 0 350px; padding: 40px; background: linear-gradient(180deg, #0f172a 0%, #2563eb 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; gap: 20px; }
+.auth-side-title { font-size: 2.2rem; font-weight: 900; line-height: 1.1; }
+.auth-features { list-style: none; padding: 0; margin: 0; }
+.auth-feature-item { margin-bottom: 10px; font-size: 0.95rem; opacity: 0.9; }
+.auth-feature-item::before { content: "✓"; margin-right: 10px; font-weight: bold; }
+.auth-card-body { flex: 1; padding: 40px; }
+.auth-form-control { border-radius: 12px; min-height: 50px; border: 1px solid #e2e8f0; }
+.auth-footer { margin-top: 20px; display: flex; justify-content: space-between; font-size: 0.9rem; }
+
+/* Booking Cards (Standardized) */
+.booking-card { border-radius: 22px; border: 1px solid rgba(15, 23, 42, 0.08); background: #fff; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+.booking-status { padding: 5px 12px; border-radius: 999px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+.status-pending { background: #fff7ed; color: #c2410c; }
+.status-confirmed { background: #eff6ff; color: #1d4ed8; }
+.status-completed { background: #f0fdf4; color: #15803d; }
+.status-cancelled { background: #fef2f2; color: #b91c1c; }
+.booking-timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 15px 0; }
+.timeline-item { height: 6px; border-radius: 10px; background: #f1f5f9; }
+.timeline-item.done { background: #10b981; }
+.timeline-item.active { background: #3b82f6; }
+
+
+/* Theme layout helpers */
+.site-content { padding: 40px 0; min-height: 80vh; }
+.container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+
+/* Navbar CSS (moved from plugin) */
+.app-navbar { background: linear-gradient(90deg, #0d1029, #16193a); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08); padding: 1rem 0; z-index: 1000; position: relative; }
+.app-navbar .navbar-brand { font-size: 2rem; letter-spacing: 0.3px; color: #fff !important; font-weight: 800; }
+.app-navbar .btn { border-radius: 10px; padding: 8px 20px; font-weight: 700; transition: all 0.3s; }
+.app-navbar .btn-outline-light { color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.42); background: rgba(255, 255, 255, 0.08); }
+.app-navbar .btn-outline-light:hover { background: #fff; color: #0d1029; }
+.app-navbar .btn-danger { background: #dc3545; color: #fff; border: 1px solid #dc3545; }
+.app-navbar .btn-danger:hover { background: #bb2d3b; }
+
+/* Global Footer */
+.app-footer { background: #0d1029; color: #fff; padding: 3rem 0; text-align: center; margin-top: 40px; }
+.app-footer p { opacity: 0.7; font-size: 0.9rem; }
+
+/* Homepage Premium Styles */
+.hero-section { background: #0f172a; padding: 100px 0; border-radius: 0 0 50px 50px; }
+.hero-title { font-size: 3.5rem; font-weight: 800; line-height: 1.2; }
+.hero-badge { background: rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 99px; font-size: 0.8rem; font-weight: 700; letter-spacing: 1px; display: inline-block; }
+.hero-stat-card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); }
+.hero-stat-card h4 { font-size: 1.1rem; font-weight: 800; margin-bottom: 5px; }
+.hero-stat-card p { font-size: 0.85rem; opacity: 0.7; margin: 0; }
+.hero-main-image { width: 100%; border-radius: 30px; box-shadow: 0 50px 100px rgba(0,0,0,0.5); }
+
+.search-section { margin-top: -60px; position: relative; z-index: 10; }
+.search-card { background: #fff; padding: 40px; border-radius: 30px; box-shadow: 0 30px 60px rgba(15,23,42,0.12); border: 1px solid rgba(15,23,42,0.08); }
+.search-input { border-radius: 15px; border: 2px solid #f1f5f9; background: #f8fafc; padding: 15px 25px; transition: all 0.3s; }
+.search-input:focus { border-color: #2563eb; background: #fff; box-shadow: 0 0 0 4px rgba(37,99,235,0.1); }
+
+.category-pill { background: #fff; padding: 20px; border-radius: 22px; border: 1px solid rgba(15,23,42,0.08); font-weight: 700; color: #0f172a; transition: all 0.3s; display: block; text-align: center; }
+.category-pill:hover { transform: translateY(-5px); background: #2563eb; color: #fff; box-shadow: 0 15px 30px rgba(37,99,235,0.2); }
+
+.salon-card { border-radius: 25px; overflow: hidden; background: #fff; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(15,23,42,0.05); }
+.salon-card:hover { transform: translateY(-12px); box-shadow: 0 30px 60px rgba(15,23,42,0.15); }
+.salon-image-wrap { position: relative; height: 220px; overflow: hidden; }
+.salon-image { width: 100%; height: 100%; object-fit: cover; transition: all 0.5s; }
+.salon-card:hover .salon-image { scale: 1.1; }
+.salon-badge { position: absolute; top: 15px; left: 15px; background: #0f172a; color: #fff; padding: 6px 16px; border-radius: 99px; font-size: 0.75rem; font-weight: 700; }
+.salon-title { font-weight: 800; font-size: 1.25rem; color: #0f172a; }
+.salon-btn { border-radius: 12px; font-weight: 700; padding: 10px 20px; }
+

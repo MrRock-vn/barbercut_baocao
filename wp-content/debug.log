@@ -1,0 +1,707 @@
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_bookings` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_bookings (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            booking_code VARCHAR(20) UNIQUE,
+            user_id INT NOT NULL,
+            salon_id INT NOT NULL,
+            service_id INT NOT NULL,
+            staff_id INT,
+            booking_date DATE NOT NULL,
+            booking_time TIME NOT NULL,
+            duration INT,
+            note LONGTEXT,
+            status ENUM('pending', 'confirmed', 'in-progress', 'completed', 'cancelled') DEFAULT 'pending',
+            cancellation_reason LONGTEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES wp_users(ID) ON DELETE CASCADE,
+            FOREIGN KEY (salon_id) REFERENCES wp_lopas_salons(id),
+            FOREIGN KEY (service_id) REFERENCES wp_lopas_services(id),
+            FOREIGN KEY (staff_id) REFERENCES wp_lopas_staff(id),
+            INDEX idx_user_date (user_id, booking_date),
+            INDEX idx_salon_date (salon_id, booking_date),
+            INDEX idx_status (status),
+            UNIQUE KEY slot_booking (salon_id, staff_id, booking_date, booking_time)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables, dbDelta
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_orders` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_orders (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            order_code VARCHAR(20) UNIQUE,
+            user_id INT NOT NULL,
+            total_price DECIMAL(10, 2) NOT NULL,
+            voucher_id INT,
+            discount_amount DECIMAL(10, 2) DEFAULT 0,
+            final_price DECIMAL(10, 2) NOT NULL,
+            payment_method ENUM('vnpay', 'cod') DEFAULT 'cod',
+            payment_status ENUM('unpaid', 'pending', 'paid', 'refunded') DEFAULT 'unpaid',
+            order_status ENUM('pending', 'confirmed', 'completed', 'cancelled') DEFAULT 'pending',
+            notes LONGTEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES wp_users(ID) ON DELETE CASCADE,
+            INDEX idx_user_date (user_id, created_at),
+            INDEX idx_status (payment_status, order_status)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables, dbDelta
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_order_items` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_order_items (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            order_id INT NOT NULL,
+            booking_id INT,
+            service_id INT NOT NULL,
+            price DECIMAL(10, 2) NOT NULL,
+            quantity INT DEFAULT 1,
+            subtotal DECIMAL(10, 2) NOT NULL,
+            FOREIGN KEY (order_id) REFERENCES wp_lopas_orders(id) ON DELETE CASCADE,
+            FOREIGN KEY (booking_id) REFERENCES wp_lopas_bookings(id),
+            FOREIGN KEY (service_id) REFERENCES wp_lopas_services(id)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables, dbDelta
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_payments` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_payments (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            order_id INT NOT NULL,
+            transaction_code VARCHAR(100) UNIQUE,
+            amount DECIMAL(10, 2) NOT NULL,
+            payment_method ENUM('vnpay', 'cod') DEFAULT 'cod',
+            status ENUM('pending', 'success', 'failed', 'refunded') DEFAULT 'pending',
+            response_data LONGTEXT,
+            refund_id INT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (order_id) REFERENCES wp_lopas_orders(id),
+            INDEX idx_transaction (transaction_code),
+            INDEX idx_status (status)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables, dbDelta
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_refunds` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_refunds (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            payment_id INT NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            reason VARCHAR(255),
+            status ENUM('pending', 'approved', 'rejected', 'completed') DEFAULT 'pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (payment_id) REFERENCES wp_lopas_payments(id)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables, dbDelta
+[09-May-2026 15:42:27 UTC] WordPress database error Duplicate key name 'code' for query CREATE TABLE IF NOT EXISTS wp_lopas_vouchers (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            code VARCHAR(50) UNIQUE NOT NULL,
+            description LONGTEXT,
+            discount_type ENUM('fixed', 'percent') DEFAULT 'fixed',
+            discount_value DECIMAL(10, 2),
+            max_discount DECIMAL(10, 2),
+            min_order_value DECIMAL(10, 2),
+            max_uses INT,
+            used_count INT DEFAULT 0,
+            valid_from DATE,
+            valid_to DATE,
+            status ENUM('active', 'inactive') DEFAULT 'active',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX idx_valid_date (valid_from, valid_to),
+            UNIQUE KEY code (code)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables, dbDelta
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_reviews` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_reviews (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            booking_id INT NOT NULL,
+            user_id INT NOT NULL,
+            salon_id INT NOT NULL,
+            rating INT CHECK (rating BETWEEN 1 AND 5),
+            comment LONGTEXT,
+            approved BOOLEAN DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (booking_id) REFERENCES wp_lopas_bookings(id) ON DELETE CASCADE,
+            FOREIGN KEY (user_id) REFERENCES wp_users(ID),
+            FOREIGN KEY (salon_id) REFERENCES wp_lopas_salons(id),
+            INDEX idx_salon_rating (salon_id, rating),
+            INDEX idx_approved (approved)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables, dbDelta
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_bookings` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_bookings (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            booking_code VARCHAR(20) UNIQUE,
+            user_id INT NOT NULL,
+            salon_id INT NOT NULL,
+            service_id INT NOT NULL,
+            staff_id INT,
+            booking_date DATE NOT NULL,
+            booking_time TIME NOT NULL,
+            duration INT,
+            note LONGTEXT,
+            status ENUM('pending', 'confirmed', 'in-progress', 'completed', 'cancelled') DEFAULT 'pending',
+            cancellation_reason LONGTEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES wp_users(ID) ON DELETE CASCADE,
+            FOREIGN KEY (salon_id) REFERENCES wp_lopas_salons(id),
+            FOREIGN KEY (service_id) REFERENCES wp_lopas_services(id),
+            FOREIGN KEY (staff_id) REFERENCES wp_lopas_staff(id),
+            INDEX idx_user_date (user_id, booking_date),
+            INDEX idx_salon_date (salon_id, booking_date),
+            INDEX idx_status (status),
+            UNIQUE KEY slot_booking (salon_id, staff_id, booking_date, booking_time)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci; made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_orders` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_orders (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            order_code VARCHAR(20) UNIQUE,
+            user_id INT NOT NULL,
+            total_price DECIMAL(10, 2) NOT NULL,
+            voucher_id INT,
+            discount_amount DECIMAL(10, 2) DEFAULT 0,
+            final_price DECIMAL(10, 2) NOT NULL,
+            payment_method ENUM('vnpay', 'cod') DEFAULT 'cod',
+            payment_status ENUM('unpaid', 'pending', 'paid', 'refunded') DEFAULT 'unpaid',
+            order_status ENUM('pending', 'confirmed', 'completed', 'cancelled') DEFAULT 'pending',
+            notes LONGTEXT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES wp_users(ID) ON DELETE CASCADE,
+            INDEX idx_user_date (user_id, created_at),
+            INDEX idx_status (payment_status, order_status)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci; made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_order_items` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_order_items (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            order_id INT NOT NULL,
+            booking_id INT,
+            service_id INT NOT NULL,
+            price DECIMAL(10, 2) NOT NULL,
+            quantity INT DEFAULT 1,
+            subtotal DECIMAL(10, 2) NOT NULL,
+            FOREIGN KEY (order_id) REFERENCES wp_lopas_orders(id) ON DELETE CASCADE,
+            FOREIGN KEY (booking_id) REFERENCES wp_lopas_bookings(id),
+            FOREIGN KEY (service_id) REFERENCES wp_lopas_services(id)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci; made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_payments` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_payments (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            order_id INT NOT NULL,
+            transaction_code VARCHAR(100) UNIQUE,
+            amount DECIMAL(10, 2) NOT NULL,
+            payment_method ENUM('vnpay', 'cod') DEFAULT 'cod',
+            status ENUM('pending', 'success', 'failed', 'refunded') DEFAULT 'pending',
+            response_data LONGTEXT,
+            refund_id INT,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (order_id) REFERENCES wp_lopas_orders(id),
+            INDEX idx_transaction (transaction_code),
+            INDEX idx_status (status)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci; made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_refunds` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_refunds (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            payment_id INT NOT NULL,
+            amount DECIMAL(10, 2) NOT NULL,
+            reason VARCHAR(255),
+            status ENUM('pending', 'approved', 'rejected', 'completed') DEFAULT 'pending',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+            FOREIGN KEY (payment_id) REFERENCES wp_lopas_payments(id)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci; made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables
+[09-May-2026 15:42:27 UTC] WordPress database error Duplicate key name 'code' for query CREATE TABLE IF NOT EXISTS wp_lopas_vouchers (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            code VARCHAR(50) UNIQUE NOT NULL,
+            description LONGTEXT,
+            discount_type ENUM('fixed', 'percent') DEFAULT 'fixed',
+            discount_value DECIMAL(10, 2),
+            max_discount DECIMAL(10, 2),
+            min_order_value DECIMAL(10, 2),
+            max_uses INT,
+            used_count INT DEFAULT 0,
+            valid_from DATE,
+            valid_to DATE,
+            status ENUM('active', 'inactive') DEFAULT 'active',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            INDEX idx_valid_date (valid_from, valid_to),
+            UNIQUE KEY code (code)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci; made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables
+[09-May-2026 15:42:27 UTC] WordPress database error Can't create table `wordpressnangcao`.`wp_lopas_reviews` (errno: 150 "Foreign key constraint is incorrectly formed") for query CREATE TABLE IF NOT EXISTS wp_lopas_reviews (
+            id INT PRIMARY KEY AUTO_INCREMENT,
+            booking_id INT NOT NULL,
+            user_id INT NOT NULL,
+            salon_id INT NOT NULL,
+            rating INT CHECK (rating BETWEEN 1 AND 5),
+            comment LONGTEXT,
+            approved BOOLEAN DEFAULT 0,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (booking_id) REFERENCES wp_lopas_bookings(id) ON DELETE CASCADE,
+            FOREIGN KEY (user_id) REFERENCES wp_users(ID),
+            FOREIGN KEY (salon_id) REFERENCES wp_lopas_salons(id),
+            INDEX idx_salon_rating (salon_id, rating),
+            INDEX idx_approved (approved)
+        ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_520_ci; made by activate_plugin, do_action('activate_lopas/lopas.php'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Activator::activate, LOPAS_Database::create_tables
+[09-May-2026 16:24:29 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[09-May-2026 16:24:29 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-09'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '16:24:29' AND '17:24:29'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[09-May-2026 16:47:36 UTC] Automatic updates starting...
+[09-May-2026 16:47:36 UTC]   Automatic plugin updates starting...
+[09-May-2026 16:47:36 UTC]   Automatic plugin updates complete.
+[09-May-2026 16:47:36 UTC] Automatic updates complete.
+[09-May-2026 17:18:19 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[09-May-2026 17:18:19 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[09-May-2026 17:19:13 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[09-May-2026 17:19:13 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[09-May-2026 17:26:24 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[09-May-2026 17:26:24 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-09'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '17:26:24' AND '18:26:24'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 01:59:25 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 01:59:25 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '01:59:25' AND '02:59:25'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 01:59:38 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 01:59:38 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:11:35 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:11:35 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:14:43 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:14:43 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:15:13 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:15:13 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:18:12 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:18:12 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:19:54 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:19:54 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:55:56 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 02:55:56 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '02:55:56' AND '03:55:56'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 02:57:11 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:57:11 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:57:17 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 02:57:18 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:12:37 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 04:12:37 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '04:12:37' AND '05:12:37'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 04:19:03 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:19:03 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:19:24 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:19:24 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:11 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:11 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:13 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:13 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:20 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:20 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:23 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:23 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:25 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:25 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:50 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:50 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:52 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:23:52 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:24:05 UTC] PHP Notice:  Function WP_Styles::add được gọi <strong>không chính xác</strong>. The style with the handle "twentytwentyfive-lopas-override" was enqueued with dependencies that are not registered: lopas-public. Vui lòng xem <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Hướng dẫn Debug trong WordPress</a> để biết thêm thông tin. (Thông điệp này đã được thêm vào trong phiên bản 6.9.1.) in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\functions.php on line 6131
+[10-May-2026 04:24:25 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:24:25 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:24:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 04:24:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '04:24:30' AND '05:24:30'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 04:36:01 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:36:01 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:36:01 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:36:01 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:36:01 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:36:01 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:36:04 UTC] Automatic updates starting...
+[10-May-2026 04:36:04 UTC]   Automatic plugin updates starting...
+[10-May-2026 04:36:04 UTC]   Automatic plugin updates complete.
+[10-May-2026 04:36:05 UTC] Automatic updates complete.
+[10-May-2026 04:43:10 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:43:10 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:44:18 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:44:18 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:45:33 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:45:33 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:49:54 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:49:54 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:50:23 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:50:23 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:51:11 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:51:11 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:51:20 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:51:20 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:51:24 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:51:24 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('wp-includes/template-canvas.php'), get_the_block_template_html, do_blocks, render_block, WP_Block->render, WP_Block->render, WP_Block->render, render_block_core_post_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:52:35 UTC] PHP Warning:  wp_update_themes(): Đã xảy ra lỗi không mong muốn. Có thể có sự cố với WordPress.org hoặc cấu hình của máy chủ. Nếu bạn tiếp tục gặp sự cố, vui lòng thử hỏi trong <a href="https://wordpress.org/support/forums/">diễn đàn hỗ trợ</a>. (WordPress không thể thiết lập kết nối an toàn tới WordPress.org. Vui lòng liên hệ quản trị máy chủ của bạn.) in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\functions.php on line 6131
+[10-May-2026 04:52:48 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 04:52:48 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 05:30:57 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 05:30:57 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 05:30:59 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 05:30:59 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '05:30:59' AND '06:30:59'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 05:31:18 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 05:31:18 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 05:32:34 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 05:32:34 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 05:33:37 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 05:33:37 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 05:43:36 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 05:43:36 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:00:20 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:00:20 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:00:43 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:00:43 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:01:14 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:01:14 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:04:41 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:04:41 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:18:50 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'Barber Shop Quận 1', 'Phong cách hiện đại, thợ tay nghề cao.', '123 Lê Lợi, Quận 1, TP.HCM', '0901234567', 'q1@barber.com', NULL, NULL, 0, 0, '09:00:00', '21:00:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:18:50 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'Gent Barbershop', 'Không gian sang trọng, dịch vụ chuyên nghiệp.', '45 Thảo Điền, Quận 2, TP.HCM', '0907654321', 'gent@barber.com', NULL, NULL, 0, 0, '08:30:00', '20:30:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:18:50 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'House of Barbers', 'Nơi hội tụ những thợ cắt tóc hàng đầu.', '88 Nguyễn Huệ, Quận 1, TP.HCM', '0912345678', 'house@barber.com', NULL, NULL, 0, 0, '10:00:00', '22:00:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:18:50 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'The Old School', 'Cắt tóc kiểu cổ điển, truyền thống.', '21 Phan Xích Long, Phú Nhuận, TP.HCM', '0988888888', 'old@barber.com', NULL, NULL, 0, 0, '08:00:00', '19:00:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:18:50 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'Barber X Premium', 'Trải nghiệm đẳng cấp 5 sao.', '55 Nam Kỳ Khởi Nghĩa, Quận 3, TP.HCM', '0933333333', 'x@barber.com', NULL, NULL, 0, 0, '09:00:00', '21:00:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:18:50 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'Men\'s Grooming Center', 'Chăm sóc toàn diện cho phái mạnh.', '102 Cách Mạng Tháng 8, Quận 10, TP.HCM', '0944444444', 'grooming@barber.com', NULL, NULL, 0, 0, '08:30:00', '20:00:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:18:50 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'Classic Cuts & Shave', 'Kỹ thuật cắt tỉa điêu luyện.', '15 Trần Hưng Đạo, Quận 5, TP.HCM', '0955555555', 'classic@barber.com', NULL, NULL, 0, 0, '09:00:00', '20:30:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:19:20 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'Barber Shop Quận 1', 'Phong cách hiện đại, thợ tay nghề cao.', '123 Lê Lợi, Quận 1, TP.HCM', '0901234567', 'q1@barber.com', NULL, NULL, 0, 0, '09:00:00', '21:00:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:19:20 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'Gent Barbershop', 'Không gian sang trọng, dịch vụ chuyên nghiệp.', '45 Thảo Điền, Quận 2, TP.HCM', '0907654321', 'gent@barber.com', NULL, NULL, 0, 0, '08:30:00', '20:30:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:19:20 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'House of Barbers', 'Nơi hội tụ những thợ cắt tóc hàng đầu.', '88 Nguyễn Huệ, Quận 1, TP.HCM', '0912345678', 'house@barber.com', NULL, NULL, 0, 0, '10:00:00', '22:00:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:19:20 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'The Old School', 'Cắt tóc kiểu cổ điển, truyền thống.', '21 Phan Xích Long, Phú Nhuận, TP.HCM', '0988888888', 'old@barber.com', NULL, NULL, 0, 0, '08:00:00', '19:00:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:19:21 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'Barber X Premium', 'Trải nghiệm đẳng cấp 5 sao.', '55 Nam Kỳ Khởi Nghĩa, Quận 3, TP.HCM', '0933333333', 'x@barber.com', NULL, NULL, 0, 0, '09:00:00', '21:00:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:19:21 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'Men\'s Grooming Center', 'Chăm sóc toàn diện cho phái mạnh.', '102 Cách Mạng Tháng 8, Quận 10, TP.HCM', '0944444444', 'grooming@barber.com', NULL, NULL, 0, 0, '08:30:00', '20:00:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:19:21 UTC] WordPress database error Duplicate entry '1' for key 'user_id' for query INSERT INTO `wp_lopas_salons` (`user_id`, `name`, `description`, `address`, `phone`, `email`, `latitude`, `longitude`, `avatar_id`, `cover_id`, `opening_time`, `closing_time`, `status`) VALUES (1, 'Classic Cuts & Shave', 'Kỹ thuật cắt tỉa điêu luyện.', '15 Trần Hưng Đạo, Quận 5, TP.HCM', '0955555555', 'classic@barber.com', NULL, NULL, 0, 0, '09:00:00', '20:30:00', 'active') made by LOPAS_Salon::create
+[10-May-2026 06:20:58 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:20:58 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:21:14 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 8 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:21:14 UTC] WordPress database error Unknown column 'total_bookings' in 'order clause' for query SELECT * FROM wp_lopas_salons WHERE status = 'active' ORDER BY total_bookings DESC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT id FROM wp_lopas_categories WHERE name = 'Massage'
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT id FROM wp_lopas_categories WHERE name = 'Skincare'
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:23:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SHOW FULL COLUMNS FROM `wp_lopas_categories`
+[10-May-2026 06:24:51 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 06:24:53 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 06:24:53 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '06:24:53' AND '07:24:53'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 06:25:20 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_categories' doesn't exist for query SELECT * FROM wp_lopas_categories WHERE is_active = 1 ORDER BY sort_order ASC LIMIT 6 made by require('wp-blog-header.php'), require_once('wp-includes/template-loader.php'), include('/themes/lopas-theme/page.php'), the_content, apply_filters('the_content'), WP_Hook->apply_filters, do_shortcode, preg_replace_callback, do_shortcode_tag, LOPAS_Homepage->render_homepage
+[10-May-2026 07:03:00 UTC] PHP Parse error:  syntax error, unexpected identifier "add_action", expecting "function" or "const" in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 45
+[10-May-2026 08:08:25 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 08:08:25 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '08:08:25' AND '09:08:25'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 08:21:30 UTC] LOPAS Debug: Getting services for salon 21
+[10-May-2026 08:21:30 UTC] LOPAS Debug: Getting services for salon 16
+[10-May-2026 08:21:30 UTC] LOPAS Debug: Getting services for salon 16
+[10-May-2026 08:22:30 UTC] LOPAS Debug: Getting services for salon 21
+[10-May-2026 08:24:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 08:24:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '08:24:30' AND '09:24:30'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 08:24:31 UTC] LOPAS Debug: Getting services for salon 21
+[10-May-2026 08:26:17 UTC] LOPAS Debug: Getting services for salon 21
+[10-May-2026 08:27:59 UTC] LOPAS Debug: Getting services for salon 21
+[10-May-2026 08:29:30 UTC] LOPAS Debug: Getting services for salon 21
+[10-May-2026 08:29:36 UTC] LOPAS Debug: ajax_get_available_slots CALLED
+[10-May-2026 08:29:45 UTC] WordPress database error Cannot add or update a child row: a foreign key constraint fails (`wordpressnangcao`.`wp_lopas_bookings`, CONSTRAINT `wp_lopas_bookings_ibfk_4` FOREIGN KEY (`staff_id`) REFERENCES `wp_lopas_staff` (`id`)) for query INSERT INTO `wp_lopas_bookings` (`booking_code`, `user_id`, `salon_id`, `service_id`, `staff_id`, `booking_date`, `booking_time`, `duration`, `note`, `status`) VALUES ('BSB202605101101', 2, 21, 25, 0, '2026-05-12', '09:00', 30, '', 'pending') made by do_action('wp_ajax_lopas_create_booking'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Public->ajax_create_booking, LOPAS_Booking::create
+[10-May-2026 08:29:53 UTC] WordPress database error Cannot add or update a child row: a foreign key constraint fails (`wordpressnangcao`.`wp_lopas_bookings`, CONSTRAINT `wp_lopas_bookings_ibfk_4` FOREIGN KEY (`staff_id`) REFERENCES `wp_lopas_staff` (`id`)) for query INSERT INTO `wp_lopas_bookings` (`booking_code`, `user_id`, `salon_id`, `service_id`, `staff_id`, `booking_date`, `booking_time`, `duration`, `note`, `status`) VALUES ('BSB202605105010', 2, 21, 25, 0, '2026-05-12', '09:00', 30, '', 'pending') made by do_action('wp_ajax_lopas_create_booking'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Public->ajax_create_booking, LOPAS_Booking::create
+[10-May-2026 08:32:14 UTC] PHP Fatal error:  Cannot redeclare LOPAS_Public::ajax_create_booking() in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 298
+[10-May-2026 08:32:19 UTC] PHP Fatal error:  Cannot redeclare LOPAS_Public::ajax_create_booking() in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 298
+[10-May-2026 08:32:24 UTC] PHP Fatal error:  Cannot redeclare LOPAS_Public::ajax_create_booking() in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 298
+[10-May-2026 08:32:49 UTC] PHP Fatal error:  Cannot redeclare LOPAS_Public::ajax_create_booking() in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 298
+[10-May-2026 08:34:51 UTC] PHP Fatal error:  Cannot redeclare LOPAS_Public::ajax_create_booking() in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 298
+[10-May-2026 08:35:12 UTC] PHP Parse error:  syntax error, unexpected token "public", expecting end of file in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 243
+[10-May-2026 08:36:40 UTC] LOPAS Debug: Getting services for salon 21
+[10-May-2026 08:37:07 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method LOPAS_Payment_Controller::get_vnpay_url() in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php:286
+Stack trace:
+#0 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\class-wp-hook.php(341): LOPAS_Public->ajax_create_booking('')
+#1 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters('', Array)
+#2 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#3 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_lopas_c...')
+#4 {main}
+  thrown in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 286
+[10-May-2026 08:37:20 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method LOPAS_Customer_Dashboard::render_my_bookings() in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php:219
+Stack trace:
+#0 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\shortcodes.php(434): LOPAS_Public->render_my_bookings(Array, '', 'lopas_my_bookin...')
+#1 [internal function]: do_shortcode_tag(Array)
+#2 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\shortcodes.php(273): preg_replace_callback('/\\[(\\[?)(lopas_...', 'do_shortcode_ta...', '[lopas_my_booki...')
+#3 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\class-wp-hook.php(341): do_shortcode('[lopas_my_booki...')
+#4 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('[lopas_my_booki...', Array)
+#5 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\post-template.php(256): apply_filters('the_content', '[lopas_my_booki...')
+#6 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\themes\lopas-theme\page.php(9): the_content()
+#7 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\template-loader.php(132): include('C:\\aiu\\htdocs\\W...')
+#8 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-blog-header.php(19): require_once('C:\\aiu\\htdocs\\W...')
+#9 C:\aiu\htdocs\Wordpressnangcao\wordpress\index.php(17): require('C:\\aiu\\htdocs\\W...')
+#10 {main}
+  thrown in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 219
+[10-May-2026 08:37:31 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method LOPAS_Customer_Dashboard::render_my_bookings() in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php:219
+Stack trace:
+#0 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\shortcodes.php(434): LOPAS_Public->render_my_bookings(Array, '', 'lopas_my_bookin...')
+#1 [internal function]: do_shortcode_tag(Array)
+#2 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\shortcodes.php(273): preg_replace_callback('/\\[(\\[?)(lopas_...', 'do_shortcode_ta...', '[lopas_my_booki...')
+#3 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\class-wp-hook.php(341): do_shortcode('[lopas_my_booki...')
+#4 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('[lopas_my_booki...', Array)
+#5 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\post-template.php(256): apply_filters('the_content', '[lopas_my_booki...')
+#6 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\themes\lopas-theme\page.php(9): the_content()
+#7 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\template-loader.php(132): include('C:\\aiu\\htdocs\\W...')
+#8 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-blog-header.php(19): require_once('C:\\aiu\\htdocs\\W...')
+#9 C:\aiu\htdocs\Wordpressnangcao\wordpress\index.php(17): require('C:\\aiu\\htdocs\\W...')
+#10 {main}
+  thrown in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 219
+[10-May-2026 08:37:42 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method LOPAS_Customer_Dashboard::render_my_bookings() in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php:219
+Stack trace:
+#0 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\shortcodes.php(434): LOPAS_Public->render_my_bookings(Array, '', 'lopas_my_bookin...')
+#1 [internal function]: do_shortcode_tag(Array)
+#2 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\shortcodes.php(273): preg_replace_callback('/\\[(\\[?)(lopas_...', 'do_shortcode_ta...', '[lopas_my_booki...')
+#3 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\class-wp-hook.php(341): do_shortcode('[lopas_my_booki...')
+#4 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('[lopas_my_booki...', Array)
+#5 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\post-template.php(256): apply_filters('the_content', '[lopas_my_booki...')
+#6 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\themes\lopas-theme\page.php(9): the_content()
+#7 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\template-loader.php(132): include('C:\\aiu\\htdocs\\W...')
+#8 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-blog-header.php(19): require_once('C:\\aiu\\htdocs\\W...')
+#9 C:\aiu\htdocs\Wordpressnangcao\wordpress\index.php(17): require('C:\\aiu\\htdocs\\W...')
+#10 {main}
+  thrown in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 219
+[10-May-2026 08:37:42 UTC] PHP Fatal error:  Uncaught Error: Call to undefined method LOPAS_Customer_Dashboard::render_my_bookings() in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php:219
+Stack trace:
+#0 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\shortcodes.php(434): LOPAS_Public->render_my_bookings(Array, '', 'lopas_my_bookin...')
+#1 [internal function]: do_shortcode_tag(Array)
+#2 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\shortcodes.php(273): preg_replace_callback('/\\[(\\[?)(lopas_...', 'do_shortcode_ta...', '[lopas_my_booki...')
+#3 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\class-wp-hook.php(341): do_shortcode('[lopas_my_booki...')
+#4 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\plugin.php(205): WP_Hook->apply_filters('[lopas_my_booki...', Array)
+#5 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\post-template.php(256): apply_filters('the_content', '[lopas_my_booki...')
+#6 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\themes\lopas-theme\page.php(9): the_content()
+#7 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\template-loader.php(132): include('C:\\aiu\\htdocs\\W...')
+#8 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-blog-header.php(19): require_once('C:\\aiu\\htdocs\\W...')
+#9 C:\aiu\htdocs\Wordpressnangcao\wordpress\index.php(17): require('C:\\aiu\\htdocs\\W...')
+#10 {main}
+  thrown in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 219
+[10-May-2026 08:41:30 UTC] PHP Warning:  Undefined array key "keyword" in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 303
+[10-May-2026 08:41:30 UTC] PHP Warning:  Undefined array key "keyword" in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\public\class-public.php on line 303
+[10-May-2026 08:41:41 UTC] LOPAS Debug: Getting services for salon 17
+[10-May-2026 08:46:46 UTC] LOPAS Debug: Getting services for salon 21
+[10-May-2026 08:50:27 UTC] LOPAS Debug: Getting services for salon 22
+[10-May-2026 08:53:20 UTC] LOPAS Debug: Getting services for salon 17
+[10-May-2026 08:53:57 UTC] LOPAS Debug: Getting services for salon 20
+[10-May-2026 08:57:12 UTC] LOPAS Debug: Getting services for salon 20
+[10-May-2026 08:57:26 UTC] VNPay Request: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=8000000&vnp_Command=pay&vnp_CreateDate=20260510085726&vnp_CurrCode=VND&vnp_IpAddr=%3A%3A1&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang%3A+BSO202605101298&vnp_OrderType=billpayment&vnp_ReturnUrl=http%3A%2F%2Flocalhost%2FWordpressnangcao%2Fwordpress%2Fwp-admin%2Fadmin-ajax.php%3Faction%3Dlopas_vnpay_return&vnp_TmnCode=5652YMTY&vnp_TxnRef=BSO202605101298&vnp_Version=2.1.0&vnp_SecureHash=487cf332240f6f6fc421f21c0b504fdb72738afb44d518042f67e6a693cbdcc3ec1ad894d16b00be62636b123b9019bcf475d2675903c7a2a24e1b17be5bc72d
+[10-May-2026 08:57:52 UTC] VNPay Verify Error: Hash Mismatch.
+[10-May-2026 08:57:52 UTC] Calculated Hash: b8e3125d64f6ff9d6e2004ad2249a18ea48b64c2eb3a7e6a5d788f450b5b8724fee7c287e22a784bd074a561ec71dce1a39a43955b2316e0084654dafb28aefa
+[10-May-2026 08:57:52 UTC] Received Hash: b9111463c9e6c6b529581d86dad475cc6faee2385e0358df62ae2ab8630473cc2d8d55c8c0fc15b4629c7e1d2802d000eed35411ab3c344ebfa79544a02b8bd1
+[10-May-2026 08:57:52 UTC] Hash Data: action=lopas_vnpay_return&vnp_Amount=8000000&vnp_BankCode=NCB&vnp_BankTranNo=VNP15531903&vnp_CardType=ATM&vnp_OrderInfo=Thanh+toan+don+hang%3A+BSO202605101298&vnp_PayDate=20260510155744&vnp_ResponseCode=00&vnp_TmnCode=5652YMTY&vnp_TransactionNo=15531903&vnp_TransactionStatus=00&vnp_TxnRef=BSO202605101298
+[10-May-2026 09:00:58 UTC] LOPAS Debug: Getting services for salon 20
+[10-May-2026 09:01:13 UTC] VNPay Request: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=10000000&vnp_Command=pay&vnp_CreateDate=20260510090113&vnp_CurrCode=VND&vnp_IpAddr=%3A%3A1&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang%3A+BSO202605101845&vnp_OrderType=billpayment&vnp_ReturnUrl=http%3A%2F%2Flocalhost%2FWordpressnangcao%2Fwordpress%2Fwp-admin%2Fadmin-ajax.php%3Faction%3Dlopas_vnpay_return&vnp_TmnCode=5652YMTY&vnp_TxnRef=BSO202605101845&vnp_Version=2.1.0&vnp_SecureHash=a9418c65777879830956e8cde4a20644909b7199c693f9ee0c4c3dc585f4c380b9820d0a0c169c83f8b35e88235cd75a9006cc37130fd930754ae2c58231601c
+[10-May-2026 09:04:15 UTC] LOPAS Debug: Getting services for salon 19
+[10-May-2026 09:04:29 UTC] VNPay Request: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=13000000&vnp_Command=pay&vnp_CreateDate=20260510090429&vnp_CurrCode=VND&vnp_IpAddr=%3A%3A1&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang%3A+BSO202605108362&vnp_OrderType=billpayment&vnp_ReturnUrl=http%3A%2F%2Flocalhost%2FWordpressnangcao%2Fwordpress%2Fwp-admin%2Fadmin-ajax.php%3Faction%3Dlopas_vnpay_return&vnp_TmnCode=5652YMTY&vnp_TxnRef=BSO202605108362&vnp_Version=2.1.0&vnp_SecureHash=001cca31b404b5f50c6e966e2224f4a59626eda2a0d9fdc56e143e138a0058e39d08e80187f670992a148c44114a7f591dd2e7386929809471debcd51f883da5
+[10-May-2026 09:04:56 UTC] PHP Warning:  Undefined property: stdClass::$booking_id in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\vnpay\class-payment-controller.php on line 195
+[10-May-2026 09:04:56 UTC] PHP Fatal error:  Uncaught ArgumentCountError: Too few arguments to function LOPAS_Email_Hooks::on_payment_completed(), 1 passed in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\class-wp-hook.php on line 343 and exactly 2 expected in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\class-email-hooks.php:50
+Stack trace:
+#0 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\class-wp-hook.php(343): LOPAS_Email_Hooks->on_payment_completed('2')
+#1 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters('', Array)
+#2 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#3 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\vnpay\class-payment-controller.php(201): do_action('lopas_payment_c...', '2', '8')
+#4 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\class-wp-hook.php(341): LOPAS_Payment_Controller->handle_vnpay_return('')
+#5 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\class-wp-hook.php(365): WP_Hook->apply_filters('', Array)
+#6 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-includes\plugin.php(522): WP_Hook->do_action(Array)
+#7 C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-admin\admin-ajax.php(192): do_action('wp_ajax_lopas_v...')
+#8 {main}
+  thrown in C:\aiu\htdocs\Wordpressnangcao\wordpress\wp-content\plugins\lopas\includes\class-email-hooks.php on line 50
+[10-May-2026 09:07:47 UTC] LOPAS Debug: Getting services for salon 19
+[10-May-2026 09:08:01 UTC] VNPay Request: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html?vnp_Amount=13000000&vnp_Command=pay&vnp_CreateDate=20260510090801&vnp_CurrCode=VND&vnp_IpAddr=%3A%3A1&vnp_Locale=vn&vnp_OrderInfo=Thanh+toan+don+hang%3A+BSO202605105556&vnp_OrderType=billpayment&vnp_ReturnUrl=http%3A%2F%2Flocalhost%2FWordpressnangcao%2Fwordpress%2Fwp-admin%2Fadmin-ajax.php%3Faction%3Dlopas_vnpay_return&vnp_TmnCode=5652YMTY&vnp_TxnRef=BSO202605105556&vnp_Version=2.1.0&vnp_SecureHash=4742f0dbcc0c29762cd4eb8c3bfa87b665cd1487cb198b14bd07ab3cb2f111d9379704a68529a475630a3118a6c55ce3358d32a7be74596c99d012d777aa67eb
+[10-May-2026 13:20:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 13:20:30 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '13:20:30' AND '14:20:30'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 14:45:58 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 14:45:58 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '14:45:58' AND '15:45:58'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 15:26:14 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[10-May-2026 15:26:14 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-10'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '15:26:14' AND '16:26:14'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[11-May-2026 04:49:17 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-12'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_24h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[11-May-2026 04:49:17 UTC] WordPress database error Table 'wordpressnangcao.wp_lopas_booking_reminders' doesn't exist for query SELECT b.* FROM wp_lopas_bookings b
+            WHERE b.booking_date = '2026-05-11'
+            AND TIME(CONCAT(b.booking_date, ' ', b.booking_time)) BETWEEN '04:49:17' AND '05:49:17'
+            AND b.status IN ('pending', 'confirmed')
+            AND b.id NOT IN (
+                SELECT booking_id FROM wp_lopas_booking_reminders 
+                WHERE reminder_type = 'before_1h' AND sent = 1
+            )
+            LIMIT 100 made by do_action_ref_array('wp_scheduled_event_lopas_send_reminders'), WP_Hook->do_action, WP_Hook->apply_filters, LOPAS_Booking_Reminder->send_reminders
+[11-May-2026 04:49:18 UTC] Automatic updates starting...
+[11-May-2026 04:49:19 UTC]   Automatic plugin updates starting...
+[11-May-2026 04:49:19 UTC]   Automatic plugin updates complete.
+[11-May-2026 04:49:20 UTC] Automatic updates complete.

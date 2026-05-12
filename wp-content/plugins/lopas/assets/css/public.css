@@ -1,0 +1,743 @@
+/**
+ * LOPAS Public Styles - 100% Clone of Barber-Spa
+ * Exact colors, layout, and design from barber-spa project
+ */
+
+:root {
+  --primary-color: #0d6efd;
+  --dark-color: #0f172a;
+  --dark-2: #111827;
+  --text-color: #1f2937;
+  --muted-color: #6b7280;
+  --light-bg: #f3f4f6;
+  --white: #ffffff;
+  --border-color: #e5e7eb;
+  --shadow-soft: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --shadow-medium: 0 20px 40px rgba(15, 23, 42, 0.12);
+  --radius-lg: 22px;
+  --radius-md: 16px;
+  --radius-sm: 12px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background: linear-gradient(180deg, #e2e8f0 0%, #eff6ff 42%, #f8fafc 100%);
+  color: var(--text-color);
+}
+
+/* HERO */
+.hero-section {
+  position: relative;
+  min-height: 640px;
+  padding: 90px 0 120px;
+  background:
+    linear-gradient(90deg, rgba(9, 14, 40, 0.92), rgba(15, 23, 42, 0.7)),
+    url("https://images.unsplash.com/photo-1621605815971-fbc98d665033?auto=format&fit=crop&w=1600&q=80")
+      center/cover no-repeat;
+  overflow: hidden;
+}
+
+.hero-badge {
+  display: inline-block;
+  padding: 9px 16px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.hero-title {
+  font-size: 3.4rem;
+  line-height: 1.15;
+  font-weight: 800;
+  max-width: 760px;
+  margin: 0;
+}
+
+.hero-subtitle {
+  max-width: 640px;
+  font-size: 1.12rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.hero-btn-primary,
+.hero-btn-secondary {
+  border-radius: 14px;
+  padding: 14px 24px;
+  font-weight: 700;
+}
+
+.hero-image-card {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 14px;
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(4px);
+}
+
+.hero-main-image {
+  width: 100%;
+  height: 480px;
+  object-fit: cover;
+  border-radius: 22px;
+  display: block;
+}
+
+.hero-stats {
+  max-width: 760px;
+}
+
+.hero-stat-card {
+  height: 100%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  padding: 18px 16px;
+  backdrop-filter: blur(4px);
+}
+
+.hero-stat-card h4 {
+  margin: 0;
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+.hero-stat-card p {
+  margin: 8px 0 0;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 0.95rem;
+}
+
+/* SEARCH */
+.search-section {
+  margin-top: -70px;
+  position: relative;
+  z-index: 3;
+  padding-bottom: 30px;
+}
+
+.search-card {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: var(--shadow-medium);
+  backdrop-filter: blur(10px);
+}
+
+.search-card h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--dark-color);
+}
+
+.search-input:focus {
+  border-color: rgba(13, 110, 253, 0.35);
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.1);
+}
+
+.search-btn {
+  min-height: 64px;
+}
+
+.search-input,
+.search-btn {
+  border-radius: 14px;
+}
+
+.search-input {
+  border: 1px solid var(--border-color);
+  padding-left: 18px;
+}
+
+.search-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.12);
+  border-color: rgba(13, 110, 253, 0.4);
+}
+
+.search-btn {
+  font-weight: 700;
+}
+
+/* COMMON */
+.section-heading {
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.section-badge {
+  display: inline-block;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: #e8f0ff;
+  color: #2563eb;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-bottom: 14px;
+}
+
+.section-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--dark-color);
+  margin-bottom: 12px;
+}
+
+.section-subtitle {
+  color: var(--muted-color);
+  font-size: 1.02rem;
+  line-height: 1.8;
+  margin-bottom: 0;
+}
+
+/* CATEGORIES */
+.categories-section {
+  background: transparent;
+}
+
+.category-pill {
+  min-height: 78px;
+  padding: 18px 20px;
+  background: var(--white);
+  border-radius: 18px;
+  color: var(--dark-color);
+  font-weight: 700;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(229, 231, 235, 0.8);
+  transition: all 0.25s ease;
+}
+
+.category-pill:hover {
+  transform: translateY(-5px);
+  background: var(--primary-color);
+  color: var(--white);
+  box-shadow: 0 16px 32px rgba(13, 110, 253, 0.22);
+}
+
+/* SALONS */
+.featured-salons-section {
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(37, 99, 235, 0.08),
+      transparent 28%
+    ),
+    #f8fafc;
+}
+
+.salon-card {
+  border-radius: 28px;
+  overflow: hidden;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+  background: #fff;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+}
+
+.salon-card:hover {
+  transform: translateY(-9px);
+  box-shadow: 0 26px 60px rgba(15, 23, 42, 0.16);
+}
+
+.salon-image-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.salon-image {
+  width: 100%;
+  height: 240px;
+  object-fit: cover;
+  display: block;
+}
+
+.salon-badge {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(15, 23, 42, 0.86);
+  color: #fff;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.salon-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--dark-color);
+}
+
+.salon-address {
+  min-height: 48px;
+}
+
+.rating-pill {
+  display: inline-block;
+  background: #fff7e6;
+  color: #b76e00;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+.salon-btn {
+  border-radius: 14px;
+  font-weight: 700;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* STEPS */
+.booking-steps-section {
+  background: #f5f7fb;
+}
+
+.step-card {
+  background: var(--white);
+  border-radius: 22px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-soft);
+  height: 100%;
+}
+
+.step-number {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--primary-color);
+  margin-bottom: 14px;
+}
+
+.step-card h5 {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--dark-color);
+  margin-bottom: 10px;
+}
+
+.step-card p {
+  margin: 0;
+  color: var(--muted-color);
+  line-height: 1.7;
+}
+
+/* PROMO BANNER */
+.promo-section {
+  padding-top: 8px;
+  padding-bottom: 24px;
+}
+
+.promo-carousel .carousel-inner {
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+}
+
+.promo-slide {
+  position: relative;
+  height: 520px;
+}
+
+.promo-slide-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.promo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(18, 42, 106, 0.86) 0%,
+    rgba(21, 61, 147, 0.62) 60%,
+    rgba(21, 61, 147, 0.3) 100%
+  );
+  display: flex;
+  align-items: center;
+  padding: 48px;
+}
+
+.promo-content {
+  max-width: 620px;
+  color: #fff;
+}
+
+.promo-tag {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.86rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.promo-content h2 {
+  font-size: 3rem;
+  line-height: 1.1;
+  font-weight: 900;
+  margin-bottom: 14px;
+}
+
+.promo-content p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.94);
+  margin-bottom: 24px;
+}
+
+.promo-content .btn {
+  border-radius: 14px;
+  padding: 14px 24px;
+  font-weight: 800;
+}
+
+/* ANGELS SHOWCASE */
+.angels-showcase {
+  background: linear-gradient(180deg, #eff4ff 0%, #f8fafc 100%);
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+
+.angels-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.angels-line {
+  width: 6px;
+  height: 42px;
+  background: #3b82f6;
+  border-radius: 999px;
+  flex-shrink: 0;
+}
+
+.angels-heading h2 {
+  margin: 0 0 8px;
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+  color: #0f172a;
+  text-transform: none;
+}
+
+.angels-heading p {
+  margin: 0;
+  font-size: 1.05rem;
+  color: #475569;
+  line-height: 1.7;
+  max-width: 620px;
+}
+
+.angel-item {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.28s ease;
+}
+
+.angel-item:hover {
+  transform: translateY(-6px);
+}
+
+.angel-thumb-wrap {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  background: #dfe6ef;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
+}
+
+.angel-thumb {
+  width: 100%;
+  height: 430px;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.45s ease;
+}
+
+.angel-item:hover .angel-thumb {
+  transform: scale(1.05);
+}
+
+.angel-ribbon {
+  position: absolute;
+  top: 0;
+  left: 16px;
+  background: #143d93;
+  color: #fff;
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 12px 10px 14px;
+  line-height: 1.2;
+  text-align: center;
+  min-width: 86px;
+  letter-spacing: 0.3px;
+  clip-path: polygon(0 0, 100% 0, 100% 84%, 50% 100%, 0 84%);
+  z-index: 2;
+}
+
+.angel-meta {
+  padding-top: 14px;
+}
+
+.angel-channel {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #143d93;
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+
+.angel-address {
+  font-size: 0.98rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* FOOTER */
+.shine-footer {
+  margin-top: 40px;
+  background: linear-gradient(135deg, #0b1a47, #172f75);
+  color: #fff;
+  padding-top: 42px;
+}
+
+.shine-footer-top {
+  margin-bottom: 34px;
+}
+
+.shine-logo-box {
+  min-height: 160px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.shine-footer-bottom {
+  margin-top: 20px;
+}
+
+.shine-logo-box {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  min-height: 175px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 28px 20px;
+}
+
+.shine-logo-text {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
+.shine-logo-desc {
+  font-size: 1.08rem;
+  color: rgba(255, 255, 255, 0.94);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.shine-footer-main {
+  padding-bottom: 26px;
+}
+
+.shine-footer-main h5 {
+  font-size: 1.24rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: #fff;
+}
+
+.shine-footer-main ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.shine-footer-main ul li {
+  margin-bottom: 12px;
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.94);
+}
+
+.shine-footer-main a {
+  color: rgba(255, 255, 255, 0.94);
+  text-decoration: none;
+}
+
+.shine-footer-main a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.payment-icons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.payment-icons span {
+  min-width: 58px;
+  height: 40px;
+  padding: 0 12px;
+  border-radius: 10px;
+  background: #fff;
+  color: #173f95;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.shine-footer-bottom {
+  background: rgba(255, 255, 255, 0.08);
+  text-align: center;
+  padding: 18px 14px;
+  font-size: 0.96rem;
+  color: rgba(255, 255, 255, 0.92);
+  margin-top: 10px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 991.98px) {
+  .hero-section {
+    min-height: auto;
+    padding: 70px 0 120px;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-main-image {
+    height: 360px;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .search-card {
+    padding: 24px;
+  }
+  
+  .promo-slide {
+    height: 430px;
+  }
+
+  .promo-overlay {
+    padding: 34px;
+  }
+
+  .promo-content h2 {
+    font-size: 2.2rem;
+  }
+
+  .angel-thumb {
+    height: 360px;
+  }
+
+  .shine-logo-text {
+    font-size: 2.4rem;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-main-image {
+    height: 300px;
+  }
+
+  .search-section {
+    margin-top: -50px;
+  }
+
+  .search-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.7rem;
+  }
+  
+  .promo-slide {
+    height: 340px;
+  }
+
+  .promo-overlay {
+    padding: 24px;
+  }
+
+  .promo-content h2 {
+    font-size: 1.65rem;
+  }
+
+  .promo-content p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .angels-heading h2 {
+    font-size: 1.6rem;
+  }
+
+  .angels-heading p {
+    font-size: 1rem;
+  }
+
+  .angel-thumb {
+    height: 280px;
+  }
+
+  .shine-logo-text {
+    font-size: 2rem;
+  }
+
+  .shine-logo-desc {
+    font-size: 0.98rem;
+  }
+}

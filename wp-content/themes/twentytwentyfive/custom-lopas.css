@@ -1,0 +1,152 @@
+/**
+ * Custom CSS for LOPAS Plugin - Override Twenty Twenty-Five Theme
+ * Fix white space and apply Barber Shop styling
+ */
+
+/* ============================================
+   FIX THEME SPACING ISSUES
+   ============================================ */
+
+/* Remove excessive padding from theme */
+.wp-site-blocks {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.wp-block-group {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Remove theme's default spacing */
+body .is-layout-constrained > * {
+    margin-block-start: 0 !important;
+    margin-block-end: 0 !important;
+}
+
+/* Fix header spacing */
+.wp-block-template-part {
+    margin-bottom: 0 !important;
+}
+
+/* ============================================
+   LOPAS PLUGIN OVERRIDES
+   ============================================ */
+
+/* Ensure LOPAS sections have proper spacing */
+.lopas-homepage,
+.lopas-booking-wizard,
+.lopas-booking-form,
+.lopas-my-bookings,
+.lopas-customer-dashboard {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+
+/* Hero section should touch the header */
+.hero-section {
+    margin-top: 0 !important;
+}
+
+/* ============================================
+   BARBER SHOP THEME COLORS
+   ============================================ */
+
+/* Override theme colors with Barber colors */
+:root {
+    --wp--preset--color--primary: #C8A96E !important;
+    --wp--preset--color--contrast: #1A1A1A !important;
+    --wp--preset--color--base: #FFFFFF !important;
+}
+
+/* Links */
+a {
+    color: #C8A96E !important;
+}
+
+a:hover {
+    color: #D4AF37 !important;
+}
+
+/* Buttons */
+.wp-element-button,
+.wp-block-button__link {
+    background-color: #C8A96E !important;
+    color: #1A1A1A !important;
+    border: none !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-weight: 700 !important;
+}
+
+.wp-element-button:hover,
+.wp-block-button__link:hover {
+    background-color: #D4AF37 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(200, 169, 110, 0.3) !important;
+}
+
+/* ============================================
+   TYPOGRAPHY OVERRIDES
+   ============================================ */
+
+/* Headings use Playfair Display */
+h1, h2, h3, h4, h5, h6,
+.wp-block-heading {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    color: #1A1A1A !important;
+}
+
+/* Body text */
+body,
+.wp-block-paragraph {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* ============================================
+   NAVIGATION MENU STYLING
+   ============================================ */
+
+/* Header/Navigation */
+.wp-block-navigation {
+    background: #1A1A1A !important;
+}
+
+.wp-block-navigation a {
+    color: #FFFFFF !important;
+}
+
+.wp-block-navigation a:hover {
+    color: #C8A96E !important;
+}
+
+/* ============================================
+   CONTENT WIDTH
+   ============================================ */
+
+/* Ensure full-width sections work properly */
+.alignfull {
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+    max-width: 100vw !important;
+    width: 100vw !important;
+}
+
+/* ============================================
+   MOBILE RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+    /* Remove extra padding on mobile */
+    .wp-site-blocks {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+
+/* ============================================
+   GOOGLE FONTS IMPORT
+   ============================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;600;700;800&display=swap');
+
