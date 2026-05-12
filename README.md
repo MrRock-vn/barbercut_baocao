@@ -109,7 +109,7 @@ wordpress/
 | Vai trò  | Email                     | Mật khẩu       | Ghi chú            |
 | -------- | ------------------------- | -------------- | ------------------ |
 
-| Customer | `damtrungson09@gmail.com` | `Anhhd@12345`  | test quên mật khẩu |
+| Customer | `damtrungson09@gmail.com` | `Anhhd@12345`  |   |
 
 ## 📄 License & Liên hệ
 Dự án được phát triển cho môn học **Phần mềm mã nguồn mở**.

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barber Spa - Đồ án Phần mềm mã nguồn mở</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a2a3a;
+            --accent-color: #d4a373;
+        }
+        body { background-color: #fcfaf7; color: #333; }
+        .hero { background: linear-gradient(rgba(26,42,58,0.9), rgba(26,42,58,0.9)), url('https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=1200&q=80'); background-size: cover; color: white; padding: 80px 0; border-radius: 0 0 50px 50px; }
+        .card { border: none; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .section-title { border-left: 6px solid var(--accent-color); padding-left: 20px; margin: 50px 0 30px; color: var(--primary-color); }
+        .tech-item { background: white; padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #eee; height: 100%; }
+        .table thead { background-color: var(--primary-color); color: white; }
+        .badge-role { font-size: 0.8rem; padding: 5px 12px; border-radius: 50px; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 15px; }
+        .test-account-box { background: white; border-radius: 15px; padding: 20px; border-left: 5px solid var(--accent-color); }
+    </style>
+</head>
+<body>
+
+<div class="hero text-center">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">💈 Barber Spa</h1>
+        <p class="lead mb-4">Website Đặt Lịch Salon / Barber Trực Tuyến</p>
+        <span class="badge bg-warning text-dark p-2 px-4">Đồ án: Phần mềm mã nguồn mở</span>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <section>
+        <h2 class="section-title">👥 Thành viên nhóm</h2>
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-hover align-middle">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Họ và tên</th>
+                            <th>MSSV</th>
+                            <th>Vai trò</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="fw-bold">Nguyễn Công Sơn</td>
+                            <td>23810310102</td>
+                            <td><span class="badge bg-danger badge-role">Nhóm trưởng</span></td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Nguyễn Văn Quang</td>
+                            <td>23810310108</td>
+                            <td><span class="badge bg-secondary badge-role">Thành viên</span></td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Nguyễn Văn Danh</td>
+                            <td>23810310136</td>
+                            <td><span class="badge bg-secondary badge-role">Thành viên</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">🎯 Giới thiệu dự án</h2>
+        <p class="fs-5">Hệ thống đặt lịch chuyên nghiệp trên nền tảng <strong>WordPress</strong>, tích hợp Plugin <strong>LOPAS</strong> giúp kết nối khách hàng và salon tóc/spa một cách tối ưu.</p>
+        <div class="row g-4 mt-2">
+            <div class="col-md-4">
+                <div class="tech-item"><i class="fas fa-user-circle fa-2x mb-3 text-primary"></i><h5>Khách hàng</h5><p class="small">Tìm kiếm & đặt lịch qua frontend AJAX.</p></div>
+            </div>
+            <div class="col-md-4">
+                <div class="tech-item"><i class="fas fa-cut fa-2x mb-3 text-success"></i><h5>Chủ Salon</h5><p class="small">Điều hành nhân viên & xem báo cáo doanh thu.</p></div>
+            </div>
+            <div class="col-md-4">
+                <div class="tech-item"><i class="fas fa-cog fa-2x mb-3 text-warning"></i><h5>Quản trị viên</h5><p class="small">Quản lý toàn bộ hệ thống & phê duyệt salon.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">🚀 Công nghệ sử dụng</h2>
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-3"><div class="tech-item fw-bold">WordPress 6.x</div></div>
+            <div class="col-md-6 col-lg-3"><div class="tech-item fw-bold">PHP 8.0 (MVC)</div></div>
+            <div class="col-md-6 col-lg-3"><div class="tech-item fw-bold">MySQL Database</div></div>
+            <div class="col-md-6 col-lg-3"><div class="tech-item fw-bold">Bootstrap 5</div></div>
+            <div class="col-md-6 col-lg-3"><div class="tech-item fw-bold">Chart.js</div></div>
+            <div class="col-md-6 col-lg-3"><div class="tech-item fw-bold">VNPay Gateway</div></div>
+            <div class="col-md-6 col-lg-3"><div class="tech-item fw-bold">AJAX Realtime</div></div>
+            <div class="col-md-6 col-lg-3"><div class="tech-item fw-bold">PHPMailer</div></div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">🗂️ Cấu trúc dự án (Plugin LOPAS)</h2>
+        <pre><code>wordpress/
+├── wp-content/plugins/lopas/
+│   ├── assets/        (CSS, JS, Images)
+│   ├── includes/      (Controllers, Models, API)
+│   ├── templates/     (Giao diện đặt lịch)
+│   └── lopas.php      (Entry Point)
+└── README.md          (Documentation)</code></pre>
+    </section>
+
+    <section>
+        <h2 class="section-title">✨ Chức năng chính</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card"><div class="card-body">
+                    <h5><i class="fas fa-check-circle text-success me-2"></i>Dành cho khách</h5>
+                    <ul class="small">
+                        <li>Tìm kiếm & Autocomplete salon/dịch vụ.</li>
+                        <li>Đặt lịch 4 bước nhanh chóng.</li>
+                        <li>Thanh toán online VNPay hoặc COD.</li>
+                        <li>Quản lý lịch sử và đánh giá Verified.</li>
+                    </ul>
+                </div></div>
+            </div>
+            <div class="col-md-6">
+                <div class="card"><div class="card-body">
+                    <h5><i class="fas fa-check-circle text-primary me-2"></i>Dành cho quản lý</h5>
+                    <ul class="small">
+                        <li>Dashboard biểu đồ Chart.js trực quan.</li>
+                        <li>Quản lý nhân viên & Lịch nghỉ (Day-off).</li>
+                        <li>Xác nhận/Hủy lịch hẹn thời gian thực.</li>
+                        <li>Phê duyệt và quản lý đánh giá khách hàng.</li>
+                    </ul>
+                </div></div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2 class="section-title">🔐 Tài khoản Test</h2>
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="test-account-box">
+                    <strong><i class="fas fa-shield-alt text-danger me-2"></i>Admin:</strong><br>
+                    User: <code>admin@barberspa.vn</code> / Pass: <code>Admin@123</code>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="test-account-box">
+                    <strong><i class="fas fa-user-tie text-success me-2"></i>Owner:</strong><br>
+                    User: <code>owner1@gmail.com</code> / Pass: <code>Owner@123</code>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="test-account-box">
+                    <strong><i class="fas fa-user text-primary me-2"></i>Customer:</strong><br>
+                    User: <code>an@gmail.com</code> / Pass: <code>Customer@123</code>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer class="text-center py-5 mt-5 bg-dark text-white-50">
+    <div class="container">
+        <p class="mb-0">Hà Nội, 2026 - Dự án môn học Phần mềm mã nguồn mở</p>
+        <small>Phát triển bởi Nhóm 1</small>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
